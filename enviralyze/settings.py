@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     #own apps
+    "accounts",
+    "profiles",
+    "products",
+    "lists",
 
     #3d party apps
     'rest_framework',
@@ -46,6 +50,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 ROOT_URLCONF = "enviralyze.urls"
 
