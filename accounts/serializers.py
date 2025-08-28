@@ -20,6 +20,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             email=validated_data["email"],
             username=validated_data.get("username"),
-            password=validated_data["password"]
+            password=validated_data["password"],
+            is_active=False
         )
         return user

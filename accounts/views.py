@@ -4,6 +4,7 @@ from .serializers import UserSerializer, RegisterSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from verifications.utils import send_verification_email
 
 User = get_user_model()
 
