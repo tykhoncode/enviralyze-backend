@@ -22,14 +22,13 @@ from django.conf import settings
 from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('accounts/', include('accounts.urls')),
-    path("verifications/", include("verifications.urls")),
+    path('admin/', admin.site.urls),
 
-
-    path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
+    path('api/accounts/', include('accounts.urls')),
+    path('api/verifications/', include('verifications.urls')),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
 ]
 
 if settings.DEBUG:
