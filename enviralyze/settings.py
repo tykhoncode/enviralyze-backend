@@ -1,7 +1,7 @@
 from pathlib import Path
-import environ
 import os
 from datetime import timedelta
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,17 +33,29 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    #own apps
+    #3d party apps
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+
+    # own apps
     "accounts",
     "verifications",
     "profiles",
     "products",
     "lists",
-
-    #3d party apps
-    'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
 ]
+
+SITE_ID = 1
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http" # change to "https" in prod
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -51,18 +63,17 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-AUTH_USER_MODEL = "accounts.CustomUser"
 
 ROOT_URLCONF = "enviralyze.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR/'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -87,6 +98,12 @@ DATABASES = {
     )
 }
 
+AUTH_USER_MODEL = "accounts.CustomUser"
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -147,6 +164,29 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
 }
 
+REST_AUTH = {
+    'USE_JWT': True,
+    'TOKEN_MODEL': None,
+}
+
+REST_USE_JWT = True
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": env("GOOGLE_CLIENT_ID"),
+            "secret": env("GOOGLE_CLIENT_SECRET"),
+            "key": "",
+        }
+    }
+}
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
@@ -154,4 +194,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+
 BACKEND_URL = env("BACKEND_URL", default="http://127.0.0.1:8000")
+
+GOOGLE_REDIRECT_URI = env("GOOGLE_REDIRECT_URI", default="http://localhost:3000/auth/google/callback")

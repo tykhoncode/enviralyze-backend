@@ -1,0 +1,9 @@
+Hi {{ user.username }},
+
+Thanks for joining Enviralyze!
+Please confirm your email by clicking the link below:
+
+{{ activate_url }}
+
+Cheers,
+The Enviralyze Team
