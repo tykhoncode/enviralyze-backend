@@ -19,21 +19,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
-from rest_framework_simplejwt import views as jwt_views
-from django.http import HttpResponse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api/accounts/', include('accounts.urls')),
-    path('api/verifications/', include('verifications.urls')),
 
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
     path("api/auth/", include("dj_rest_auth.urls")),
     path("api/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/auth/", include("allauth.urls")),
+    path("accounts/", include("allauth.urls")),
 ]
 
 if settings.DEBUG:

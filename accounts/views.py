@@ -25,7 +25,6 @@ class RegisterView(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = serializer.save()
 
-        
         send_verification_email(user)
 
 class LogoutView(APIView):
