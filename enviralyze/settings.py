@@ -167,6 +167,8 @@ SIMPLE_JWT = {
 REST_AUTH = {
     'USE_JWT': True,
     'TOKEN_MODEL': None,
+    'PASSWORD_RESET_USE_SITES_DOMAIN': False,
+    "PASSWORD_RESET_CONFIRM_URL": "password-reset-confirm/{uid}/{token}/",
 }
 
 REST_USE_JWT = True
@@ -198,6 +200,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+TEMPLATES[0]["DIRS"] = [BASE_DIR / "templates"]
 
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
 BACKEND_URL = env("BACKEND_URL", default="http://127.0.0.1:8000")
