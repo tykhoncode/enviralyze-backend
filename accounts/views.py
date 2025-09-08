@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions, status
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from verifications.utils import send_verification_email
 
 User = get_user_model()
 
@@ -16,16 +15,6 @@ class GetUser(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
-
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]
-
-    def perform_create(self, serializer):
-        user = serializer.save()
-
-        send_verification_email(user)
 
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]

@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
     # own apps
     "accounts",
-    "verifications",
     "profiles",
     "products",
     "lists",
