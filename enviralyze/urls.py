@@ -17,6 +17,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api/accounts/', include('accounts.urls')),
+    path("api/", include("profiles.urls")),
 
 path(
     "password-reset-confirm/<uidb64>/<token>/",
