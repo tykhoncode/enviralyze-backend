@@ -178,7 +178,8 @@ SOCIALACCOUNT_PROVIDERS = {
             "client_id": env("GOOGLE_CLIENT_ID"),
             "secret": env("GOOGLE_CLIENT_SECRET"),
             "key": "",
-        }
+        },
+        "SCOPE": ["openid", "email", "profile"],
     }
 }
 

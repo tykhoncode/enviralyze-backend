@@ -9,6 +9,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'user', 'about', 'language', 'darkmode', 'avatar', 'followers_count', 'following_count']
+        read_only_fields = ['followers_count', 'following_count']
 
 queryset = (
     Profile.objects.select_related('user')
