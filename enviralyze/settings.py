@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "dj_rest_auth",
     "dj_rest_auth.registration",
+    'drf_yasg',
 
     # own apps
     "accounts",
@@ -206,3 +207,16 @@ FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
 BACKEND_URL = env("BACKEND_URL", default="http://127.0.0.1:8000")
 
 GOOGLE_REDIRECT_URI = env("GOOGLE_REDIRECT_URI", default="http://localhost:3000/auth/google/callback")
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'LOGIN_URL': 'admin/',
+    'LOGOUT_URL': 'admin/logout/',
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
