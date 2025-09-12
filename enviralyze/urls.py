@@ -31,16 +31,14 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('api/accounts/', include('accounts.urls')),
     path("api/", include("profiles.urls")),
-
-path(
-    "password-reset-confirm/<uidb64>/<token>/",
-    PasswordResetStubView.as_view(),
-    name="password_reset_confirm",
-),
-
+    path("api/", include("products.urls")),
+    path(
+        "password-reset-confirm/<uidb64>/<token>/",
+        PasswordResetStubView.as_view(),
+        name="password_reset_confirm",
+    ),
     path("api/auth/", include("dj_rest_auth.urls")),
     path("api/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/auth/", include("allauth.urls")),
