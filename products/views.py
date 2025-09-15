@@ -8,3 +8,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    lookup_field = "barcode"
+    lookup_value_regex = r"\d{8,14}"
