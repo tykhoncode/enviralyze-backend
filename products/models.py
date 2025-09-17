@@ -11,15 +11,24 @@ class Product(models.Model):
     brand = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255, blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
-    last_synced_at = models.DateTimeField(blank=True, null=True)
-    off_last_modified_t = models.DateTimeField(blank=True, null=True)
     source = models.CharField(max_length=20, blank=True, null=True)
     sustainability_data = models.JSONField(blank=True, null=True)
 
-    def mark_synced(self, off_last_modified_t=None):
+    last_checked_at = models.DateTimeField(blank=True, null=True, db_index=True)
+    last_synced_at = models.DateTimeField(blank=True, null=True, db_index=True)
+    off_last_modified_t = models.DateTimeField(blank=True, null=True)
+    off_etag = models.CharField(max_length=255, blank=True, null=True)
+
+    def mark_synced(self, off_last_modified_t=None, etag=None):
         self.last_synced_at = timezone.now()
+        self.last_checked_at  = timezone.now()
         if off_last_modified_t:
             self.off_last_modified_t = off_last_modified_t
+        if etag is not None:
+            self.off_etag = etag
+
+    def mark_checked(self):
+        self.last_checked_at = timezone.now()
 
     def __str__(self):
         return self.name or "Unnamed Product"
