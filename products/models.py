@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils import timezone
+from django.conf import settings
 
 GTIN_VALIDATOR = RegexValidator(r'^\d{8,14}$', 'Barcode must be 8–14 digits')
 
@@ -32,3 +33,29 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name or "Unnamed Product"
+
+class ProductComment(models.Model):
+    product = models.ForeignKey(
+        'products.Product',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        db_index=True,
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='product_comments',
+    )
+    text = models.TextField()
+    is_edited = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['product', 'created_at']),
+        ]
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.product} ({self.created_at:%Y-%m-%d})"
