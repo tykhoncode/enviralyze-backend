@@ -59,3 +59,15 @@ class ProductComment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author} on {self.product} ({self.created_at:%Y-%m-%d})"
+
+class UserProductInteraction(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=None, null=True, blank=True)  # ✅ True = Approved, False = Disapproved, None = No action
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+    def __str__(self):
+        status = "Approved" if self.approved is True else "Disapproved" if self.approved is False else "Undecided"
+        return f"{status} the {self.product.name} by {self.user.email}"
