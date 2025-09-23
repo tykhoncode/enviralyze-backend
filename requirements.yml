@@ -18,3 +18,4 @@ dependencies:
       - dj-rest-auth[with_social]==7.0.1
       - requests==2.32.5
       - cryptography==45.0.7
+      - drf-nested-routers==0.93.5

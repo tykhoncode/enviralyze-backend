@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericRelation
+from comments.models import Comment
 
 GTIN_VALIDATOR = RegexValidator(r'^\d{8,14}$', 'Barcode must be 8–14 digits')
 
@@ -14,6 +16,7 @@ class Product(models.Model):
     image_url = models.URLField(blank=True, null=True)
     source = models.CharField(max_length=20, blank=True, null=True)
     sustainability_data = models.JSONField(blank=True, null=True)
+    comments = GenericRelation(Comment, related_query_name="product")
 
     last_checked_at = models.DateTimeField(blank=True, null=True, db_index=True)
     last_synced_at = models.DateTimeField(blank=True, null=True, db_index=True)
@@ -32,33 +35,7 @@ class Product(models.Model):
         self.last_checked_at = timezone.now()
 
     def __str__(self):
-        return self.name or "Unnamed Product"
-
-class ProductComment(models.Model):
-    product = models.ForeignKey(
-        'products.Product',
-        on_delete=models.CASCADE,
-        related_name='comments',
-        db_index=True,
-    )
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='product_comments',
-    )
-    text = models.TextField()
-    is_edited = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-created_at']
-        indexes = [
-            models.Index(fields=['product', 'created_at']),
-        ]
-
-    def __str__(self):
-        return f"Comment by {self.author} on {self.product} ({self.created_at:%Y-%m-%d})"
+        return f"{self.name or 'Unnamed'} ({self.barcode})"
 
 class UserProductInteraction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
