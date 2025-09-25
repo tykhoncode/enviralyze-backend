@@ -32,3 +32,16 @@ class List(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.type})"
+
+class ListItem(models.Model):
+    list = models.ForeignKey(List, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    added_at = models.DateTimeField(auto_now_add=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ("list", "product")
+        ordering = ["order", "-added_at"]
+
+    def __str__(self):
+        return f"{self.product.name} in {self.list.name}"
