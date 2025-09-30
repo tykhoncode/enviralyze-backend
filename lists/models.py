@@ -13,10 +13,10 @@ class List(models.Model):
     ]
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=20, choices=LIST_TYPES, default="custom")
-    data = models.JSONField()
+    data = models.JSONField(blank=True, null=True, default=dict)
     is_commentable = models.BooleanField(default=False)
     is_shared = models.BooleanField(default=False)
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lists")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lists")
     products = models.ManyToManyField(
         Product,
         through="ListItem",
@@ -28,7 +28,7 @@ class List(models.Model):
 
     class Meta:
         ordering = ["-created"]
-        unique_together = ("creator", "name", "type")
+        unique_together = ("owner", "name", "type")
 
     def __str__(self):
         return f"{self.name} ({self.type})"

@@ -15,7 +15,7 @@ class ListItemSerializer(serializers.ModelSerializer):
 
 
 class ListSerializer(serializers.ModelSerializer):
-    creator = serializers.StringRelatedField(read_only=True)
+    owner = serializers.StringRelatedField(read_only=True)
     products = ListItemSerializer(source="items", many=True, read_only=True)
 
     class Meta:
@@ -25,15 +25,15 @@ class ListSerializer(serializers.ModelSerializer):
             "name",
             "type",
             "is_shared",
-            "creator",
+            "owner",
             "products",
             "created",
             "updated",
         ]
-        read_only_fields = ["id", "creator", "created", "updated"]
+        read_only_fields = ["id", "owner", "created", "updated"]
 
     def create(self, validated_data):
         request = self.context.get("request")
         if request and request.user.is_authenticated:
-            validated_data["creator"] = request.user
+            validated_data["owner"] = request.user
         return super().create(validated_data)
