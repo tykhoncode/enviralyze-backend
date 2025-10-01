@@ -44,5 +44,13 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
           DJANGO_SECRET_KEY: test-secret
           DJANGO_DEBUG: "True"
+
+          EMAIL_HOST_USER: dummy@example.com
+          EMAIL_HOST_PASSWORD: dummy-password
+          DEFAULT_FROM_EMAIL: dummy@example.com
+
+          GOOGLE_CLIENT_ID: dummy-client-id
+          GOOGLE_CLIENT_SECRET: dummy-client-secret
+
         run: |
           pytest
