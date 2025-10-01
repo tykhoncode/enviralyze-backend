@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from core.views import health_check
 
 class PasswordResetStubView(TemplateView):
     template_name = "password_reset_confirm_stub.html"
@@ -43,7 +44,9 @@ urlpatterns = [
     path("api/auth/", include("dj_rest_auth.urls")),
     path("api/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/auth/", include("allauth.urls")),
-    path("accounts/", include("allauth.urls")),]
+    path("accounts/", include("allauth.urls")),
+    path("api/health/", health_check, name="health"),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

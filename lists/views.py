@@ -16,10 +16,10 @@ class ListViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.is_authenticated:
             return List.objects.filter(
-                models.Q(owner=user) | models.Q(is_shared=True)
+                models.Q(owner=user) | models.Q(is_public=True)
             ).select_related("owner").prefetch_related("items__product")
         else:
-            return List.objects.filter(is_shared=True).select_related("owner").prefetch_related("items__product")
+            return List.objects.filter(is_public=True).select_related("owner").prefetch_related("items__product")
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

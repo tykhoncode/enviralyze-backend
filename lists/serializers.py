@@ -24,7 +24,7 @@ class ListSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "type",
-            "is_shared",
+            "is_public",
             "owner",
             "products",
             "created",

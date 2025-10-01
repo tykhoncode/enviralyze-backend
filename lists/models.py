@@ -15,7 +15,7 @@ class List(models.Model):
     type = models.CharField(max_length=20, choices=LIST_TYPES, default="custom")
     data = models.JSONField(blank=True, null=True, default=dict)
     is_commentable = models.BooleanField(default=False)
-    is_shared = models.BooleanField(default=False)
+    is_public = models.BooleanField(default=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lists")
     products = models.ManyToManyField(
         Product,
@@ -31,7 +31,7 @@ class List(models.Model):
         unique_together = ("owner", "name", "type")
 
     def __str__(self):
-        return f"{self.name} ({self.type})"
+        return f"{self.name} ({self.type} list)"
 
 class ListItem(models.Model):
     list = models.ForeignKey(List, on_delete=models.CASCADE, related_name="items")

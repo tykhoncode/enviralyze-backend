@@ -7,3 +7,8 @@ static-files
 media-files
 .env
 /media/
+.coverage
+coverage.xml
+htmlcov/
+.cache/
+.pytest_cache/
