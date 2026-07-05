@@ -46,3 +46,17 @@ class ProductViewSet(viewsets.ModelViewSet):
             "approvals": product.userproductinteraction_set.filter(approved=True).count(),
             "disapprovals": product.userproductinteraction_set.filter(approved=False).count(),
         })
+
+    @action(detail=False, methods=["get"], url_path="my-votes",
+            permission_classes=[permissions.IsAuthenticated])
+    def my_votes(self, request):
+        qs = (UserProductInteraction.objects
+              .filter(user=request.user)
+              .select_related("product"))
+        approved = [i.product for i in qs if i.approved is True]
+        disapproved = [i.product for i in qs if i.approved is False]
+        ctx = {"request": request}
+        return Response({
+            "approved": ProductSerializer(approved, many=True, context=ctx).data,
+            "disapproved": ProductSerializer(disapproved, many=True, context=ctx).data,
+        })
