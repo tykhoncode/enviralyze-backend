@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     'drf_yasg',
+    'corsheaders',
 
     # own apps
     "accounts",
@@ -58,6 +59,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -216,6 +218,19 @@ FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
 BACKEND_URL = env("BACKEND_URL", default="http://127.0.0.1:8000")
 
 GOOGLE_REDIRECT_URI = env("GOOGLE_REDIRECT_URI", default="http://localhost:3000/auth/google/callback")
+
+# TODO: replace these temporary dev origins with the real frontend URL(s) before production.
+CORS_ALLOWED_ORIGINS = env.list(
+    "CORS_ALLOWED_ORIGINS",
+    default=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+)
+# TODO: if refresh tokens move to httponly cookies, set True and keep CORS_ALLOWED_ORIGINS explicit (no wildcard)
+CORS_ALLOW_CREDENTIALS = False
 
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
