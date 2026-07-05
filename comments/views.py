@@ -16,8 +16,13 @@ class CommentViewSet(viewsets.ModelViewSet):
             from products.models import Product
             return get_object_or_404(Product, barcode=self.kwargs["product_barcode"])
         if "list_pk" in self.kwargs:
+            from django.db.models import Q
             from lists.models import List
-            return get_object_or_404(List, pk=self.kwargs["list_pk"])
+            user = self.request.user
+            visible = Q(is_public=True)
+            if user.is_authenticated:
+                visible |= Q(owner=user)
+            return get_object_or_404(List.objects.filter(visible), pk=self.kwargs["list_pk"])
         return None
 
     def get_queryset(self):
