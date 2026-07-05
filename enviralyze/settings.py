@@ -173,6 +173,8 @@ SIMPLE_JWT = {
 
 REST_AUTH = {
     'USE_JWT': True,
+    # TODO: switch to httponly cookie refresh (JWT_AUTH_HTTPONLY=True + JWT_AUTH_REFRESH_COOKIE) once the frontend is ready
+    'JWT_AUTH_HTTPONLY': False,
     'TOKEN_MODEL': None,
     'PASSWORD_RESET_USE_SITES_DOMAIN': False,
     "PASSWORD_RESET_CONFIRM_URL": "password-reset-confirm/{uid}/{token}/",
