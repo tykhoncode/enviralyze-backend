@@ -25,6 +25,7 @@ class ListSerializer(serializers.ModelSerializer):
             "name",
             "type",
             "is_public",
+            "is_commentable",
             "owner",
             "products",
             "created",
