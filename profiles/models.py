@@ -25,6 +25,7 @@ class Profile(models.Model):
     about = models.TextField(blank=True, null=True)
     language = models.CharField(max_length=10, blank=True, null=True)
     darkmode = models.BooleanField(default=False)
+    email_notifications = models.BooleanField(default=True)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True)
     following = models.ManyToManyField(
         'self',

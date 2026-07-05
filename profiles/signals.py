@@ -1,7 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-from .models import Profile
+from .models import Profile, Follow
+from core.emails import send_notification_email
 import re, secrets, imghdr, requests
 from django.core.files.base import ContentFile
 from allauth.account.signals import user_signed_up, user_logged_in
@@ -122,3 +123,16 @@ def ensure_profile_on_social_added(request, sociallogin, **kwargs):
     user = sociallogin.user
     Profile.objects.get_or_create(user=user)
     _maybe_pull_google_avatar(user, sociallogin=sociallogin)
+
+
+@receiver(post_save, sender=Follow)
+def notify_on_new_follower(sender, instance, created, **kwargs):
+    if not created:
+        return
+    follower = instance.follower.user
+    name = f"{follower.first_name} {follower.last_name}".strip() or follower.email
+    send_notification_email(
+        "You have a new follower on Enviralyze",
+        f"{name} has started following you on Enviralyze.",
+        instance.following.user,
+    )
