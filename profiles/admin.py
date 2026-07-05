@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import Profile, Follow
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'language', 'darkmode', "avatar", "followers_count", "following_count")
+    list_display = ('user', 'language', 'darkmode', 'email_notifications', "avatar", "followers_count", "following_count")
+    list_filter = ("email_notifications", "darkmode")
     search_fields = ("user__email", "user__username")
 
     def followers_count(self, obj):
